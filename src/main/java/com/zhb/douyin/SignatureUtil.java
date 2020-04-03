@@ -30,10 +30,8 @@ public class SignatureUtil {
 
     private final static String js = "return generateSignature(arguments[0],arguments[1])";
 
-
     @Autowired
-    ChromeDriver driver;
-
+    InitDriver initDriver;
 
     //获取tac和dytk
     private Douyin getTacDytk(String userId) {
@@ -58,8 +56,8 @@ public class SignatureUtil {
     //webDriver获取signature
     public Douyin getSignature(String userId) {
         Douyin douyin = getTacDytk(userId);
-        JavascriptExecutor javascriptExecutor = driver;
-        String signature = (String) javascriptExecutor.executeScript(js, douyin.getTac(), douyin.getUser_id());
+        ChromeDriver driver = initDriver.getChromeDriver();
+        String signature = (String) ((JavascriptExecutor) driver).executeScript(js, douyin.getTac(), douyin.getUser_id());
         douyin.set_signature(signature);
         return douyin;
     }
